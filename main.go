@@ -3,7 +3,12 @@ package main
 import "net/http"
 
 func homeHandler(rw http.ResponseWriter, r *http.Request) {
-	rw.Write([]byte("Unit Converter"))
+	files, err := template.ParseFiles("./templates/home.html")
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	files.Execute(rw, nil)
 }
 
 func main() {
