@@ -1,19 +1,30 @@
 package main
 
-import "net/http"
+import (
+	"html/template"
+	"log"
+	"net/http"
+)
 
-func homeHandler(rw http.ResponseWriter, r *http.Request) {
+type formData struct {
+	Units []string
+}
+
+func homeHandler(rw http.ResponseWriter, _ *http.Request) {
+
+	lengthData := formData{unitToString()}
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 	files, err := template.ParseFiles("./templates/home.html")
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	files.Execute(rw, nil)
+	files.Execute(rw, lengthData)
 }
 
 func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", homeHandler)
-	http.ListenAndServe("localhost:8080", mux)
+	log.Fatal(http.ListenAndServe("localhost:8080", mux))
 }

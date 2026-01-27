@@ -52,10 +52,20 @@ func convertLengthUnit(value float64, inputUnit Unit, targetUnit Unit) (float64,
 	return targetValue, nil
 }
 
+// Helper function to convert a unit in string type to Unit
 func stringToUnit(unit string) (Unit, error) {
 	value, ok := unitTypeConversion[unit]
 	if !ok {
 		return 0, errors.New("the unit provided is not a valid unit")
 	}
 	return value, nil
+}
+
+// Helper function to return all the units as a slice of strings
+func unitToString() []string {
+	var temp []string
+	for key, _ := range unitTypeConversion {
+		temp = append(temp, key)
+	}
+	return temp
 }

@@ -1,8 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head><title>Unit Converter</title></head>
-<body>
-<h1>Unit Converter</h1>
-<p>Welcome to the length converter!</p>
-</body>
-</html>
+<form method="POST" action="/convert">
+    <input type="number" name="value">
+
+    <select name="from">
+        {{range .Units}}
+        <option value="{{.}}">{{.}}</option>
+        {{end}}
+    </select>
+
+    <select name="to">
+        {{range .Units}}
+        <option value="{{.}}">{{.}}</option>
+        {{end}}
+    </select>
+
+    <button type="submit">Convert</button>
+</form>
