@@ -1,3 +1,7 @@
+{{if .ShowResult}}
+    The result of the conversion is : {{.Result}}
+<a href="/">Convert Another</a>
+{{else}}
 <form method="POST" action="/convert">
     <input type="number" name="value">
 
@@ -15,3 +19,4 @@
 
     <button type="submit">Convert</button>
 </form>
+{{end}}

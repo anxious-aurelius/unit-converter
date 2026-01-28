@@ -62,7 +62,7 @@ func stringToUnit(unit string) (Unit, error) {
 }
 
 // Helper function to return all the units as a slice of strings
-func unitToString() []string {
+func unitsToString() []string {
 	var temp []string
 	for key, _ := range unitTypeConversion {
 		temp = append(temp, key)

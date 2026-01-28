@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -10,18 +9,20 @@ import (
 )
 
 type formData struct {
-	Units []string
+	Units      []string
+	ShowResult bool
+	Result     float64
 }
 
 func homeHandler(rw http.ResponseWriter, _ *http.Request) {
-	lengthData := formData{unitToString()}
+	data := formData{unitsToString(), false, 0}
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 	files, err := template.ParseFiles("./templates/home.html")
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	files.Execute(rw, lengthData)
+	files.Execute(rw, data)
 }
 
 func convertHandler(rw http.ResponseWriter, r *http.Request) {
@@ -29,7 +30,7 @@ func convertHandler(rw http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//Fetch the form values from the name field in html tag and validate them before passing  them to the function
+	//Fetch the form values from the name field in HTML tag and validate them before passing  them to the function
 	value, err := strconv.ParseFloat(strings.TrimSpace(r.FormValue("value")), 64)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
@@ -46,7 +47,15 @@ func convertHandler(rw http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 	}
-	fmt.Fprintf(rw, "Result: %f", convertedValue)
+	//fmt.Fprintf(rw, "Result: %f", convertedValue)
+	files, err := template.ParseFiles("./templates/home.html")
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data := formData{unitsToString(), true, convertedValue}
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
+	files.Execute(rw, data)
 }
 
 func main() {
