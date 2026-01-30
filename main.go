@@ -34,18 +34,22 @@ func convertHandler(rw http.ResponseWriter, r *http.Request) {
 	value, err := strconv.ParseFloat(strings.TrimSpace(r.FormValue("value")), 64)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
 	}
 	toUnit, err := stringToUnit(strings.TrimSpace(r.FormValue("to")))
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
 	}
 	fromUnit, err := stringToUnit(strings.TrimSpace(r.FormValue("from")))
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
 	}
 	convertedValue, err := convertLengthUnit(value, fromUnit, toUnit)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	//fmt.Fprintf(rw, "Result: %f", convertedValue)
 	files, err := template.ParseFiles("./templates/home.html")
