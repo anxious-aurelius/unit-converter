@@ -1,6 +1,9 @@
 package main
 
-import "errors"
+import (
+	"errors"
+	"slices"
+)
 
 type Unit int
 
@@ -67,5 +70,6 @@ func unitsToString() []string {
 	for key, _ := range unitTypeConversion {
 		temp = append(temp, key)
 	}
+	slices.Sort(temp)
 	return temp
 }
